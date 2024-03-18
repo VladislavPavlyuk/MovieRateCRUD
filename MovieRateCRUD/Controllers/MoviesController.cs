@@ -143,6 +143,18 @@ namespace MovieRateCRUD.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost, ActionName("Upload")]
+        public async Task<IActionResult> Upload(IFormFile uploadedImage)
+        {
+            if (uploadedImage != null && uploadedImage.Length > 0)
+            {
+                // Save the file to a dedicated file upload area
+                // You can also validate the file size, file type, etc.
+                // Process the uploaded image as needed
+            }
+            return RedirectToAction("Index");
+        }
+
         private bool MovieExists(int id)
         {
             return _context.Movies.Any(e => e.Id == id);

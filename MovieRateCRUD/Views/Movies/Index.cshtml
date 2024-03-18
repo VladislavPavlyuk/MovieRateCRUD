@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<MovieRateCRUD.Models.Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Top 10 Movies";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -49,8 +49,8 @@
             <td>
                     @Html.DisplayFor(modelItem => item.Release)
             </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Poster)
+                <td>                    
+                    <img src="@Html.DisplayFor(modelItem => item.Poster)" alt="Cover" width="100px" />
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)

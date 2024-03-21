@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace MovieRateCRUD.Controllers
+namespace MovieRate.Controllers
 {
     public class HomeController : Controller
     {

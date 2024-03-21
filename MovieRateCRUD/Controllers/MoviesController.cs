@@ -8,10 +8,39 @@ namespace MovieRateCRUD.Controllers
     {
         private readonly MovieContext _context;
 
-        public MoviesController(MovieContext context)
+        // IWebHostEnvironment предоставляет информацию об окружении, в котором запущено приложение
+        IWebHostEnvironment _appEnvironment;
+        public MoviesController(MovieContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
+
+        // Все загружаемые файлы в ASP.NET Core представлены типом IFormFile
+        // из пространства имен Microsoft.AspNetCore.Http
+        /*[HttpPost]
+        [RequestSizeLimit(1000000000)]
+        public async Task<IActionResult> AddImage(IFormFile uploadedImage)
+        {
+            if (uploadedImage != null)
+            {
+                // Путь к папке Files
+                string path = "/Images/" + uploadedImage.FileName; // имя файла
+
+                // Сохраняем файл в папку Files в каталоге wwwroot
+                // Для получения полного пути к каталогу wwwroot
+                // применяется свойство WebRootPath объекта IWebHostEnvironment
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedImage.CopyToAsync(fileStream); // копируем файл в поток
+                }
+                FileModel poster = new FileModel { Filename = uploadedImage.FileName, Path = path };
+                _context.Movies.Add(poster);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Create");
+        }*/
 
         // GET: Movies
         public async Task<IActionResult> Index()
@@ -29,6 +58,7 @@ namespace MovieRateCRUD.Controllers
 
             var Movie = await _context.Movies
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (Movie == null)
             {
                 return NotFound();
@@ -48,12 +78,27 @@ namespace MovieRateCRUD.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Age,GPA")] Movie Movie)
+        public async Task<IActionResult> Create([Bind("Id,Title,Director,Genre,Release,Poster,Description")] Movie Movie, IFormFile uploadedImage)
         {
             if (ModelState.IsValid)
             {
+                // Путь к папке Files + имя файла
+                string poster = "/Images/" + uploadedImage.FileName;
+
+                // Сохраняем файл в папку Images в каталоге wwwroot
+                // Для получения полного пути к каталогу wwwroot
+                // применяется свойство WebRootPath объекта IWebHostEnvironment
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + poster, FileMode.Create))
+                {
+                    await uploadedImage.CopyToAsync(fileStream); // копируем файл в поток
+                }
+
+                Movie.Poster = poster;
+
                 _context.Add(Movie);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(Movie);
@@ -120,6 +165,7 @@ namespace MovieRateCRUD.Controllers
 
             var Movie = await _context.Movies
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (Movie == null)
             {
                 return NotFound();
@@ -140,19 +186,8 @@ namespace MovieRateCRUD.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        [HttpPost, ActionName("Upload")]
-        public async Task<IActionResult> Upload(IFormFile uploadedImage)
-        {
-            if (uploadedImage != null && uploadedImage.Length > 0)
-            {
-                // Save the file to a dedicated file upload area
-                // You can also validate the file size, file type, etc.
-                // Process the uploaded image as needed
-            }
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         private bool MovieExists(int id)

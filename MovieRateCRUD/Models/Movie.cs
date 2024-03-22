@@ -24,8 +24,9 @@ namespace MovieRateCRUD.Models
         public string? Genre { get; set; }
 
         // год выпуска
-        [Required(ErrorMessage = "The field have to be set.")]
-        [Display(Name = "Year of realise")]
+        [Required(ErrorMessage = "Please enter the year of movie release.")]
+        [YearRange(1900, ErrorMessage = "Please enter a valid year")]
+        [Display(Name = "Release")]
         public string? Release { get; set; }
 
         // постер
@@ -36,4 +37,13 @@ namespace MovieRateCRUD.Models
         [StringLength(300, MinimumLength = 3, ErrorMessage = "The string length have to be from 3 to 300 symbols")]
         public string? Description { get; set; }
     }
+
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+    public class YearRangeAttribute : RangeAttribute
+    {
+        public YearRangeAttribute(int minimum) : base(minimum, DateTime.Now.Year)
+        {
+        }
+    }
+
 }

@@ -17,30 +17,6 @@ namespace MovieRateCRUD.Controllers
         }
 
         // Все загружаемые файлы в ASP.NET Core представлены типом IFormFile
-        // из пространства имен Microsoft.AspNetCore.Http
-        /*[HttpPost]
-        [RequestSizeLimit(1000000000)]
-        public async Task<IActionResult> AddImage(IFormFile uploadedImage)
-        {
-            if (uploadedImage != null)
-            {
-                // Путь к папке Files
-                string path = "/Images/" + uploadedImage.FileName; // имя файла
-
-                // Сохраняем файл в папку Files в каталоге wwwroot
-                // Для получения полного пути к каталогу wwwroot
-                // применяется свойство WebRootPath объекта IWebHostEnvironment
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await uploadedImage.CopyToAsync(fileStream); // копируем файл в поток
-                }
-                FileModel poster = new FileModel { Filename = uploadedImage.FileName, Path = path };
-                _context.Movies.Add(poster);
-                _context.SaveChanges();
-            }
-
-            return RedirectToAction("Create");
-        }*/
 
         // GET: Movies
         public async Task<IActionResult> Index()

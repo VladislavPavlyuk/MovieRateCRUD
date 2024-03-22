@@ -34,22 +34,16 @@
                 <span asp-validation-for="Release" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Poster" class="control-label"></label>
-                <input asp-for="Poster" class="form-control" />
-                <span asp-validation-for="Poster" class="text-danger"></span>
-           
-                <input type="file" name="uploadedImage" />
-                <input type="submit" value="Upload Image" />
-
-            </div>
-            <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group">  
+                <label asp-for="Poster" class="control-label"></label>
+                <input type="file" name="uploadedImage" />
+                <input type="submit" value="Create" class="btn btn-primary"  />
             </div>
+
         </form>
     </div>
 </div>

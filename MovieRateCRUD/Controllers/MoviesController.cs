@@ -59,17 +59,17 @@ namespace MovieRateCRUD.Controllers
             if (ModelState.IsValid)
             {
                 // Путь к папке Files + имя файла
-                string poster = "/Images/" + uploadedImage.FileName;
+                string path = "/images/" + uploadedImage.FileName;
 
                 // Сохраняем файл в папку Images в каталоге wwwroot
                 // Для получения полного пути к каталогу wwwroot
                 // применяется свойство WebRootPath объекта IWebHostEnvironment
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + poster, FileMode.Create))
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
                     await uploadedImage.CopyToAsync(fileStream); // копируем файл в поток
                 }
 
-                Movie.Poster = poster;
+                Movie.Poster = path;
 
                 _context.Add(Movie);
 
@@ -100,19 +100,33 @@ namespace MovieRateCRUD.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
+        [RequestSizeLimit(1000000000)]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Age,GPA")] Movie Movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Director,Genre,Release,Poster,Description")] Movie Movie, IFormFile uploadedImage)
         {
             if (id != Movie.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (uploadedImage != null)
             {
                 try
                 {
+                    // Путь к папке Files + имя файла
+                    string path = "/images/" + uploadedImage.FileName;
+
+                    // Сохраняем файл в папку Images в каталоге wwwroot
+                    // Для получения полного пути к каталогу wwwroot
+                    // применяется свойство WebRootPath объекта IWebHostEnvironment
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                    {
+                        await uploadedImage.CopyToAsync(fileStream); // копируем файл в поток
+                    }
+
+                    Movie.Poster = path;
                     _context.Update(Movie);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

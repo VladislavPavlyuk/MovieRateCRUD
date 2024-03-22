@@ -9,17 +9,17 @@ namespace MovieRateCRUD.Models
         public int Id { get; set; }
 
         // название фильма
-        [Required(ErrorMessage = "The field have to be set.")]
+        [Required(ErrorMessage = "The field has to be set.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "The string length have to be from 3 to 50 symbols")]
         public string? Title { get; set; }
 
         // режиссер
-        [Required(ErrorMessage = "The field have to be set.")]
+        [Required(ErrorMessage = "The field has to be set.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "The string length have to be from 3 to 50 symbols")]
         public string? Director { get; set; }
 
         // жанр
-        [Required(ErrorMessage = "The field have to be set.")]
+        [Required(ErrorMessage = "The field has to be set.")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "The string length have to be from 3 to 50 symbols")]
         public string? Genre { get; set; }
 
@@ -27,16 +27,18 @@ namespace MovieRateCRUD.Models
         [Required(ErrorMessage = "Please enter the year of movie release.")]
         [YearRange(1900, ErrorMessage = "Please enter a valid year")]
         [Display(Name = "Release")]
-        public string? Release { get; set; }
+        public int? Release { get; set; }
 
         // постер
         public string? Poster { get; set; }
 
         // краткое описание
-        [Required(ErrorMessage = "The field have to be set.")]
+        [Required(ErrorMessage = "The field has to be set.")]
         [StringLength(300, MinimumLength = 3, ErrorMessage = "The string length have to be from 3 to 300 symbols")]
         public string? Description { get; set; }
+
     }
+
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class YearRangeAttribute : RangeAttribute

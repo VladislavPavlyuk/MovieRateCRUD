@@ -109,7 +109,7 @@ namespace MovieRateCRUD.Controllers
                 return NotFound();
             }
 
-            if (uploadedImage != null)
+            if (ModelState.IsValid)
             {
                 try
                 {
